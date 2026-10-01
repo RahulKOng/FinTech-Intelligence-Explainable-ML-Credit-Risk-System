@@ -1,0 +1,1493 @@
+{
+  "data_summary": {
+    "total_rows": 1200,
+    "total_columns": 17,
+    "target_column": "is_default",
+    "features": [
+      {
+        "name": "loan_id",
+        "type": "numeric",
+        "missing_count": 0,
+        "missing_pct": 0.0,
+        "unique_values": 1200,
+        "mean": 10600.5,
+        "min": 10001.0,
+        "max": 11200.0,
+        "std": 346.55
+      },
+      {
+        "name": "loan_amnt",
+        "type": "numeric",
+        "missing_count": 0,
+        "missing_pct": 0.0,
+        "unique_values": 9,
+        "mean": 15010.42,
+        "min": 5000.0,
+        "max": 35000.0,
+        "std": 8021.61
+      },
+      {
+        "name": "term_months",
+        "type": "numeric",
+        "missing_count": 0,
+        "missing_pct": 0.0,
+        "unique_values": 2,
+        "mean": 42.5,
+        "min": 36.0,
+        "max": 60.0,
+        "std": 10.67
+      },
+      {
+        "name": "int_rate",
+        "type": "numeric",
+        "missing_count": 0,
+        "missing_pct": 0.0,
+        "unique_values": 735,
+        "mean": 22.55,
+        "min": 12.25,
+        "max": 28.5,
+        "std": 3.45
+      },
+      {
+        "name": "installment",
+        "type": "numeric",
+        "missing_count": 0,
+        "missing_pct": 0.0,
+        "unique_values": 1110,
+        "mean": 535.48,
+        "min": 123.46,
+        "max": 1457.2,
+        "std": 299.15
+      },
+      {
+        "name": "annual_inc",
+        "type": "numeric",
+        "missing_count": 0,
+        "missing_pct": 0.0,
+        "unique_values": 713,
+        "mean": 73074.42,
+        "min": 24000.0,
+        "max": 260000.0,
+        "std": 34247.49
+      },
+      {
+        "name": "dti",
+        "type": "numeric",
+        "missing_count": 0,
+        "missing_pct": 0.0,
+        "unique_values": 975,
+        "mean": 17.98,
+        "min": 2.0,
+        "max": 42.0,
+        "std": 8.7
+      },
+      {
+        "name": "fico_score",
+        "type": "numeric",
+        "missing_count": 0,
+        "missing_pct": 0.0,
+        "unique_values": 215,
+        "mean": 692.82,
+        "min": 580.0,
+        "max": 840.0,
+        "std": 46.62
+      },
+      {
+        "name": "revol_util",
+        "type": "numeric",
+        "missing_count": 0,
+        "missing_pct": 0.0,
+        "unique_values": 616,
+        "mean": 50.78,
+        "min": 3.0,
+        "max": 96.7,
+        "std": 20.07
+      },
+      {
+        "name": "open_acc",
+        "type": "numeric",
+        "missing_count": 0,
+        "missing_pct": 0.0,
+        "unique_values": 22,
+        "mean": 11.23,
+        "min": 2.0,
+        "max": 23.0,
+        "std": 3.3
+      },
+      {
+        "name": "total_acc",
+        "type": "numeric",
+        "missing_count": 0,
+        "missing_pct": 0.0,
+        "unique_values": 31,
+        "mean": 23.22,
+        "min": 10.0,
+        "max": 40.0,
+        "std": 4.8
+      },
+      {
+        "name": "delinq_2yrs",
+        "type": "numeric",
+        "missing_count": 0,
+        "missing_pct": 0.0,
+        "unique_values": 4,
+        "mean": 0.28,
+        "min": 0.0,
+        "max": 3.0,
+        "std": 0.66
+      },
+      {
+        "name": "pub_rec",
+        "type": "numeric",
+        "missing_count": 0,
+        "missing_pct": 0.0,
+        "unique_values": 3,
+        "mean": 0.14,
+        "min": 0.0,
+        "max": 2.0,
+        "std": 0.41
+      },
+      {
+        "name": "emp_length_years",
+        "type": "numeric",
+        "missing_count": 0,
+        "missing_pct": 0.0,
+        "unique_values": 7,
+        "mean": 5.41,
+        "min": 0.0,
+        "max": 10.0,
+        "std": 3.42
+      },
+      {
+        "name": "home_ownership",
+        "type": "categorical",
+        "missing_count": 0,
+        "missing_pct": 0.0,
+        "unique_values": 3,
+        "top_value": "MORTGAGE"
+      },
+      {
+        "name": "purpose",
+        "type": "categorical",
+        "missing_count": 0,
+        "missing_pct": 0.0,
+        "unique_values": 5,
+        "top_value": "debt_consolidation"
+      },
+      {
+        "name": "is_default",
+        "type": "numeric",
+        "missing_count": 0,
+        "missing_pct": 0.0,
+        "unique_values": 2,
+        "mean": 0.24,
+        "min": 0.0,
+        "max": 1.0,
+        "std": 0.42
+      }
+    ],
+    "default_count": 282,
+    "non_default_count": 918,
+    "default_rate": 23.5
+  },
+  "model_info": {
+    "primary_model": "Logistic Regression Scorecard (Interpretable Log-Odds)",
+    "comparison_model": "Gradient Boosted Decision Trees",
+    "num_features": 23,
+    "train_samples": 900,
+    "test_samples": 300,
+    "decision_threshold": 0.2
+  },
+  "performance": {
+    "primary": {
+      "threshold": 0.2,
+      "accuracy": 0.5967,
+      "precision": 0.2993,
+      "recall": 0.7097,
+      "specificity": 0.5672,
+      "f1_score": 0.4211,
+      "auc_roc": 0.7108,
+      "brier_score": 0.1501,
+      "log_loss": 0.4681,
+      "confusion_matrix": {
+        "tp": 44,
+        "fp": 103,
+        "tn": 135,
+        "fn": 18
+      },
+      "roc_curve": {
+        "fpr": [
+          0.0,
+          0.0084,
+          0.0126,
+          0.021,
+          0.0336,
+          0.0588,
+          0.0798,
+          0.0966,
+          0.1092,
+          0.1218,
+          0.1471,
+          0.1639,
+          0.1849,
+          0.2059,
+          0.2269,
+          0.2479,
+          0.2647,
+          0.2857,
+          0.3067,
+          0.3193,
+          0.3445,
+          0.3697,
+          0.395,
+          0.416,
+          0.4286,
+          0.437,
+          0.4538,
+          0.4748,
+          0.4916,
+          0.5126,
+          0.5378,
+          0.563,
+          0.5882,
+          0.6092,
+          0.6303,
+          0.6513,
+          0.6723,
+          0.6933,
+          0.7185,
+          0.7437,
+          0.7689,
+          0.7941,
+          0.8151,
+          0.8403,
+          0.8613,
+          0.8782,
+          0.8992,
+          0.9244,
+          0.9496,
+          0.9748,
+          1.0
+        ],
+        "tpr": [
+          0.0,
+          0.0645,
+          0.1452,
+          0.2097,
+          0.2581,
+          0.2581,
+          0.2742,
+          0.3065,
+          0.3548,
+          0.4032,
+          0.4032,
+          0.4355,
+          0.4516,
+          0.4677,
+          0.4839,
+          0.5,
+          0.5323,
+          0.5484,
+          0.5645,
+          0.6129,
+          0.6129,
+          0.6129,
+          0.6129,
+          0.629,
+          0.6774,
+          0.7419,
+          0.7742,
+          0.7903,
+          0.8226,
+          0.8387,
+          0.8387,
+          0.8387,
+          0.8387,
+          0.8548,
+          0.871,
+          0.8871,
+          0.9032,
+          0.9194,
+          0.9194,
+          0.9194,
+          0.9194,
+          0.9194,
+          0.9355,
+          0.9355,
+          0.9516,
+          0.9839,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ]
+      }
+    },
+    "comparison": {
+      "threshold": 0.2,
+      "accuracy": 0.2067,
+      "precision": 0.2067,
+      "recall": 1.0,
+      "specificity": 0.0,
+      "f1_score": 0.3425,
+      "auc_roc": 0.6984,
+      "brier_score": 0.1608,
+      "log_loss": 0.501,
+      "confusion_matrix": {
+        "tp": 62,
+        "fp": 238,
+        "tn": 0,
+        "fn": 0
+      },
+      "roc_curve": {
+        "fpr": [
+          0.0,
+          0.0168,
+          0.0336,
+          0.0462,
+          0.0588,
+          0.0756,
+          0.1008,
+          0.1176,
+          0.1387,
+          0.1471,
+          0.1639,
+          0.1807,
+          0.1975,
+          0.2101,
+          0.2269,
+          0.2353,
+          0.2563,
+          0.2773,
+          0.3025,
+          0.3235,
+          0.3445,
+          0.3613,
+          0.3824,
+          0.4034,
+          0.4244,
+          0.437,
+          0.458,
+          0.479,
+          0.4958,
+          0.5168,
+          0.5378,
+          0.563,
+          0.5882,
+          0.6134,
+          0.6345,
+          0.6555,
+          0.6723,
+          0.6933,
+          0.7101,
+          0.7353,
+          0.7563,
+          0.7773,
+          0.8025,
+          0.8235,
+          0.8487,
+          0.8739,
+          0.8992,
+          0.9244,
+          0.9496,
+          0.9748,
+          1.0
+        ],
+        "tpr": [
+          0.0,
+          0.0323,
+          0.0645,
+          0.1129,
+          0.1613,
+          0.1935,
+          0.1935,
+          0.2258,
+          0.2419,
+          0.3065,
+          0.3387,
+          0.371,
+          0.4032,
+          0.4516,
+          0.4839,
+          0.5484,
+          0.5645,
+          0.5806,
+          0.5806,
+          0.5968,
+          0.6129,
+          0.6452,
+          0.6613,
+          0.6774,
+          0.6935,
+          0.7419,
+          0.7581,
+          0.7742,
+          0.8065,
+          0.8226,
+          0.8387,
+          0.8387,
+          0.8387,
+          0.8387,
+          0.8548,
+          0.871,
+          0.9032,
+          0.9194,
+          0.9516,
+          0.9516,
+          0.9677,
+          0.9839,
+          0.9839,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ]
+      }
+    }
+  },
+  "global_explainability": {
+    "feature_importance": [
+      {
+        "feature_index": 6,
+        "feature": "fico_score",
+        "importance": 0.58138,
+        "direction": "Negative (Reduces Risk)"
+      },
+      {
+        "feature_index": 7,
+        "feature": "revol_util",
+        "importance": 0.4791,
+        "direction": "Positive (Increases Risk)"
+      },
+      {
+        "feature_index": 5,
+        "feature": "dti",
+        "importance": 0.39793,
+        "direction": "Positive (Increases Risk)"
+      },
+      {
+        "feature_index": 4,
+        "feature": "annual_inc",
+        "importance": 0.34143,
+        "direction": "Negative (Reduces Risk)"
+      },
+      {
+        "feature_index": 10,
+        "feature": "delinq_2yrs",
+        "importance": 0.33602,
+        "direction": "Positive (Increases Risk)"
+      },
+      {
+        "feature_index": 11,
+        "feature": "pub_rec",
+        "importance": 0.1622,
+        "direction": "Positive (Increases Risk)"
+      },
+      {
+        "feature_index": 21,
+        "feature": "purpose_small_business",
+        "importance": 0.12717,
+        "direction": "Positive (Increases Risk)"
+      },
+      {
+        "feature_index": 17,
+        "feature": "purpose_debt_consolidation",
+        "importance": 0.08928,
+        "direction": "Negative (Reduces Risk)"
+      },
+      {
+        "feature_index": 1,
+        "feature": "term_months",
+        "importance": 0.07843,
+        "direction": "Positive (Increases Risk)"
+      },
+      {
+        "feature_index": 3,
+        "feature": "installment",
+        "importance": 0.06082,
+        "direction": "Positive (Increases Risk)"
+      },
+      {
+        "feature_index": 2,
+        "feature": "int_rate",
+        "importance": 0.05944,
+        "direction": "Negative (Reduces Risk)"
+      },
+      {
+        "feature_index": 19,
+        "feature": "purpose_home_improvement",
+        "importance": 0.05934,
+        "direction": "Negative (Reduces Risk)"
+      }
+    ],
+    "coefficients": [
+      {
+        "feature": "purpose_small_business",
+        "weight": 1.029,
+        "abs_weight": 1.029,
+        "odds_ratio": 2.7982,
+        "risk_impact": "Increases Risk"
+      },
+      {
+        "feature": "fico_score",
+        "weight": -0.7558,
+        "abs_weight": 0.7558,
+        "odds_ratio": 0.4696,
+        "risk_impact": "Decreases Risk"
+      },
+      {
+        "feature": "revol_util",
+        "weight": 0.5969,
+        "abs_weight": 0.5969,
+        "odds_ratio": 1.8165,
+        "risk_impact": "Increases Risk"
+      },
+      {
+        "feature": "dti",
+        "weight": 0.5028,
+        "abs_weight": 0.5028,
+        "odds_ratio": 1.6533,
+        "risk_impact": "Increases Risk"
+      },
+      {
+        "feature": "delinq_2yrs",
+        "weight": 0.4715,
+        "abs_weight": 0.4715,
+        "odds_ratio": 1.6025,
+        "risk_impact": "Increases Risk"
+      },
+      {
+        "feature": "annual_inc",
+        "weight": -0.4637,
+        "abs_weight": 0.4637,
+        "odds_ratio": 0.629,
+        "risk_impact": "Decreases Risk"
+      },
+      {
+        "feature": "purpose_home_improvement",
+        "weight": -0.3828,
+        "abs_weight": 0.3828,
+        "odds_ratio": 0.682,
+        "risk_impact": "Decreases Risk"
+      },
+      {
+        "feature": "purpose_major_purchase",
+        "weight": -0.3039,
+        "abs_weight": 0.3039,
+        "odds_ratio": 0.7379,
+        "risk_impact": "Decreases Risk"
+      },
+      {
+        "feature": "pub_rec",
+        "weight": 0.2576,
+        "abs_weight": 0.2576,
+        "odds_ratio": 1.2938,
+        "risk_impact": "Increases Risk"
+      },
+      {
+        "feature": "purpose_debt_consolidation",
+        "weight": -0.1819,
+        "abs_weight": 0.1819,
+        "odds_ratio": 0.8336,
+        "risk_impact": "Decreases Risk"
+      },
+      {
+        "feature": "purpose_credit_card",
+        "weight": -0.1612,
+        "abs_weight": 0.1612,
+        "odds_ratio": 0.8512,
+        "risk_impact": "Decreases Risk"
+      },
+      {
+        "feature": "home_ownership_RENT",
+        "weight": 0.0968,
+        "abs_weight": 0.0968,
+        "odds_ratio": 1.1017,
+        "risk_impact": "Increases Risk"
+      }
+    ]
+  },
+  "instance_explanations": [
+    {
+      "loan_id": "10547",
+      "credit_score": 646,
+      "risk_grade": "D",
+      "risk_grade_label": "Subprime (Moderate Risk)",
+      "grade_color": "#f97316",
+      "actual_outcome": "Non-Default",
+      "explanation": {
+        "predicted_probability": 0.1861,
+        "baseline_probability": 0.2444,
+        "risk_status": "Low-to-Medium Risk / Approved",
+        "waterfall_decomposition": [
+          {
+            "feature": "dti",
+            "contribution": -0.511,
+            "abs_contribution": 0.511,
+            "direction": "Risk Decreased",
+            "raw_value": "9.35"
+          },
+          {
+            "feature": "revol_util",
+            "contribution": 0.4602,
+            "abs_contribution": 0.4602,
+            "direction": "Risk Increased",
+            "raw_value": "66.8"
+          },
+          {
+            "feature": "fico_score",
+            "contribution": 0.4266,
+            "abs_contribution": 0.4266,
+            "direction": "Risk Increased",
+            "raw_value": "667"
+          },
+          {
+            "feature": "delinq_2yrs",
+            "contribution": -0.1923,
+            "abs_contribution": 0.1923,
+            "direction": "Risk Decreased",
+            "raw_value": "0"
+          },
+          {
+            "feature": "annual_inc",
+            "contribution": 0.1778,
+            "abs_contribution": 0.1778,
+            "direction": "Risk Increased",
+            "raw_value": "59700.0"
+          },
+          {
+            "feature": "pub_rec",
+            "contribution": -0.081,
+            "abs_contribution": 0.081,
+            "direction": "Risk Decreased",
+            "raw_value": "0"
+          }
+        ],
+        "adverse_action_notices": [
+          {
+            "factor": "revol_util",
+            "reason_code": "Excessive revolving credit line utilization",
+            "impact_magnitude": 0.4602,
+            "observed_value": "66.8"
+          },
+          {
+            "factor": "fico_score",
+            "reason_code": "Credit score (FICO) below lending threshold",
+            "impact_magnitude": 0.4266,
+            "observed_value": "667"
+          },
+          {
+            "factor": "annual_inc",
+            "reason_code": "Insufficient verifiable annual income for debt burden",
+            "impact_magnitude": 0.1778,
+            "observed_value": "59700.0"
+          }
+        ]
+      },
+      "applicant_data": {
+        "loan_id": 10547,
+        "loan_amnt": 7500,
+        "term_months": 36,
+        "int_rate": 24.98,
+        "installment": 298.12,
+        "annual_inc": 59700.0,
+        "dti": 9.35,
+        "fico_score": 667,
+        "revol_util": 66.8,
+        "open_acc": 11,
+        "total_acc": 27,
+        "delinq_2yrs": 0,
+        "pub_rec": 0,
+        "emp_length_years": 7,
+        "home_ownership": "MORTGAGE",
+        "purpose": "debt_consolidation"
+      }
+    },
+    {
+      "loan_id": "10516",
+      "credit_score": 672,
+      "risk_grade": "C",
+      "risk_grade_label": "Standard (Fair)",
+      "grade_color": "#f59e0b",
+      "actual_outcome": "Non-Default",
+      "explanation": {
+        "predicted_probability": 0.1197,
+        "baseline_probability": 0.2444,
+        "risk_status": "Low-to-Medium Risk / Approved",
+        "waterfall_decomposition": [
+          {
+            "feature": "fico_score",
+            "contribution": -0.9677,
+            "abs_contribution": 0.9677,
+            "direction": "Risk Decreased",
+            "raw_value": "753"
+          },
+          {
+            "feature": "revol_util",
+            "contribution": 0.6803,
+            "abs_contribution": 0.6803,
+            "direction": "Risk Increased",
+            "raw_value": "74.2"
+          },
+          {
+            "feature": "annual_inc",
+            "contribution": 0.3958,
+            "abs_contribution": 0.3958,
+            "direction": "Risk Increased",
+            "raw_value": "43600.0"
+          },
+          {
+            "feature": "dti",
+            "contribution": -0.3781,
+            "abs_contribution": 0.3781,
+            "direction": "Risk Decreased",
+            "raw_value": "11.65"
+          },
+          {
+            "feature": "delinq_2yrs",
+            "contribution": -0.1923,
+            "abs_contribution": 0.1923,
+            "direction": "Risk Decreased",
+            "raw_value": "0"
+          },
+          {
+            "feature": "term_months",
+            "contribution": 0.1442,
+            "abs_contribution": 0.1442,
+            "direction": "Risk Increased",
+            "raw_value": "60"
+          }
+        ],
+        "adverse_action_notices": [
+          {
+            "factor": "revol_util",
+            "reason_code": "Excessive revolving credit line utilization",
+            "impact_magnitude": 0.6803,
+            "observed_value": "74.2"
+          },
+          {
+            "factor": "annual_inc",
+            "reason_code": "Insufficient verifiable annual income for debt burden",
+            "impact_magnitude": 0.3958,
+            "observed_value": "43600.0"
+          },
+          {
+            "factor": "term_months",
+            "reason_code": "Extended term length increases cumulative default exposure",
+            "impact_magnitude": 0.1442,
+            "observed_value": "60"
+          }
+        ]
+      },
+      "applicant_data": {
+        "loan_id": 10516,
+        "loan_amnt": 5000,
+        "term_months": 60,
+        "int_rate": 16.7,
+        "installment": 123.46,
+        "annual_inc": 43600.0,
+        "dti": 11.65,
+        "fico_score": 753,
+        "revol_util": 74.2,
+        "open_acc": 10,
+        "total_acc": 24,
+        "delinq_2yrs": 0,
+        "pub_rec": 0,
+        "emp_length_years": 7,
+        "home_ownership": "MORTGAGE",
+        "purpose": "debt_consolidation"
+      }
+    },
+    {
+      "loan_id": "10978",
+      "credit_score": 571,
+      "risk_grade": "E",
+      "risk_grade_label": "Deep Subprime (High Risk)",
+      "grade_color": "#ef4444",
+      "actual_outcome": "Non-Default",
+      "explanation": {
+        "predicted_probability": 0.5019,
+        "baseline_probability": 0.2444,
+        "risk_status": "High Risk / Denied",
+        "waterfall_decomposition": [
+          {
+            "feature": "fico_score",
+            "contribution": 0.7671,
+            "abs_contribution": 0.7671,
+            "direction": "Risk Increased",
+            "raw_value": "646"
+          },
+          {
+            "feature": "delinq_2yrs",
+            "contribution": 0.5171,
+            "abs_contribution": 0.5171,
+            "direction": "Risk Increased",
+            "raw_value": "1"
+          },
+          {
+            "feature": "revol_util",
+            "contribution": 0.3144,
+            "abs_contribution": 0.3144,
+            "direction": "Risk Increased",
+            "raw_value": "61.9"
+          },
+          {
+            "feature": "dti",
+            "contribution": 0.2257,
+            "abs_contribution": 0.2257,
+            "direction": "Risk Increased",
+            "raw_value": "22.1"
+          },
+          {
+            "feature": "purpose_credit_card",
+            "contribution": -0.1271,
+            "abs_contribution": 0.1271,
+            "direction": "Risk Decreased",
+            "raw_value": "N/A"
+          },
+          {
+            "feature": "purpose_debt_consolidation",
+            "contribution": 0.1025,
+            "abs_contribution": 0.1025,
+            "direction": "Risk Increased",
+            "raw_value": "N/A"
+          }
+        ],
+        "adverse_action_notices": [
+          {
+            "factor": "fico_score",
+            "reason_code": "Credit score (FICO) below lending threshold",
+            "impact_magnitude": 0.7671,
+            "observed_value": "646"
+          },
+          {
+            "factor": "delinq_2yrs",
+            "reason_code": "History of past delinquency on existing obligations",
+            "impact_magnitude": 0.5171,
+            "observed_value": "1"
+          },
+          {
+            "factor": "revol_util",
+            "reason_code": "Excessive revolving credit line utilization",
+            "impact_magnitude": 0.3144,
+            "observed_value": "61.9"
+          },
+          {
+            "factor": "dti",
+            "reason_code": "High debt-to-income (DTI) ratio relative to income",
+            "impact_magnitude": 0.2257,
+            "observed_value": "22.1"
+          }
+        ]
+      },
+      "applicant_data": {
+        "loan_id": 10978,
+        "loan_amnt": 5000,
+        "term_months": 36,
+        "int_rate": 26.5,
+        "installment": 202.79,
+        "annual_inc": 73100.0,
+        "dti": 22.1,
+        "fico_score": 646,
+        "revol_util": 61.9,
+        "open_acc": 13,
+        "total_acc": 22,
+        "delinq_2yrs": 1,
+        "pub_rec": 0,
+        "emp_length_years": 3,
+        "home_ownership": "RENT",
+        "purpose": "credit_card"
+      }
+    },
+    {
+      "loan_id": "10939",
+      "credit_score": 708,
+      "risk_grade": "B",
+      "risk_grade_label": "Near Prime (Good)",
+      "grade_color": "#3b82f6",
+      "actual_outcome": "Non-Default",
+      "explanation": {
+        "predicted_probability": 0.0626,
+        "baseline_probability": 0.2444,
+        "risk_status": "Low-to-Medium Risk / Approved",
+        "waterfall_decomposition": [
+          {
+            "feature": "annual_inc",
+            "contribution": -1.057,
+            "abs_contribution": 1.057,
+            "direction": "Risk Decreased",
+            "raw_value": "150900.0"
+          },
+          {
+            "feature": "fico_score",
+            "contribution": 0.2645,
+            "abs_contribution": 0.2645,
+            "direction": "Risk Increased",
+            "raw_value": "677"
+          },
+          {
+            "feature": "delinq_2yrs",
+            "contribution": -0.1923,
+            "abs_contribution": 0.1923,
+            "direction": "Risk Decreased",
+            "raw_value": "0"
+          },
+          {
+            "feature": "dti",
+            "contribution": 0.1067,
+            "abs_contribution": 0.1067,
+            "direction": "Risk Increased",
+            "raw_value": "20.04"
+          },
+          {
+            "feature": "pub_rec",
+            "contribution": -0.081,
+            "abs_contribution": 0.081,
+            "direction": "Risk Decreased",
+            "raw_value": "0"
+          },
+          {
+            "feature": "purpose_debt_consolidation",
+            "contribution": -0.0795,
+            "abs_contribution": 0.0795,
+            "direction": "Risk Decreased",
+            "raw_value": "N/A"
+          }
+        ],
+        "adverse_action_notices": [
+          {
+            "factor": "fico_score",
+            "reason_code": "Credit score (FICO) below lending threshold",
+            "impact_magnitude": 0.2645,
+            "observed_value": "677"
+          },
+          {
+            "factor": "dti",
+            "reason_code": "High debt-to-income (DTI) ratio relative to income",
+            "impact_magnitude": 0.1067,
+            "observed_value": "20.04"
+          }
+        ]
+      },
+      "applicant_data": {
+        "loan_id": 10939,
+        "loan_amnt": 7500,
+        "term_months": 36,
+        "int_rate": 23.54,
+        "installment": 292.44,
+        "annual_inc": 150900.0,
+        "dti": 20.04,
+        "fico_score": 677,
+        "revol_util": 53.3,
+        "open_acc": 10,
+        "total_acc": 20,
+        "delinq_2yrs": 0,
+        "pub_rec": 0,
+        "emp_length_years": 0,
+        "home_ownership": "MORTGAGE",
+        "purpose": "debt_consolidation"
+      }
+    },
+    {
+      "loan_id": "10829",
+      "credit_score": 620,
+      "risk_grade": "D",
+      "risk_grade_label": "Subprime (Moderate Risk)",
+      "grade_color": "#f97316",
+      "actual_outcome": "Default",
+      "explanation": {
+        "predicted_probability": 0.2773,
+        "baseline_probability": 0.2444,
+        "risk_status": "High Risk / Denied",
+        "waterfall_decomposition": [
+          {
+            "feature": "dti",
+            "contribution": 0.8232,
+            "abs_contribution": 0.8232,
+            "direction": "Risk Increased",
+            "raw_value": "32.44"
+          },
+          {
+            "feature": "fico_score",
+            "contribution": -0.384,
+            "abs_contribution": 0.384,
+            "direction": "Risk Decreased",
+            "raw_value": "717"
+          },
+          {
+            "feature": "revol_util",
+            "contribution": 0.2907,
+            "abs_contribution": 0.2907,
+            "direction": "Risk Increased",
+            "raw_value": "61.1"
+          },
+          {
+            "feature": "delinq_2yrs",
+            "contribution": -0.1923,
+            "abs_contribution": 0.1923,
+            "direction": "Risk Decreased",
+            "raw_value": "0"
+          },
+          {
+            "feature": "pub_rec",
+            "contribution": -0.081,
+            "abs_contribution": 0.081,
+            "direction": "Risk Decreased",
+            "raw_value": "0"
+          },
+          {
+            "feature": "purpose_debt_consolidation",
+            "contribution": -0.0795,
+            "abs_contribution": 0.0795,
+            "direction": "Risk Decreased",
+            "raw_value": "N/A"
+          }
+        ],
+        "adverse_action_notices": [
+          {
+            "factor": "dti",
+            "reason_code": "High debt-to-income (DTI) ratio relative to income",
+            "impact_magnitude": 0.8232,
+            "observed_value": "32.44"
+          },
+          {
+            "factor": "revol_util",
+            "reason_code": "Excessive revolving credit line utilization",
+            "impact_magnitude": 0.2907,
+            "observed_value": "61.1"
+          }
+        ]
+      },
+      "applicant_data": {
+        "loan_id": 10829,
+        "loan_amnt": 20000,
+        "term_months": 36,
+        "int_rate": 24.4,
+        "installment": 788.86,
+        "annual_inc": 74000.0,
+        "dti": 32.44,
+        "fico_score": 717,
+        "revol_util": 61.1,
+        "open_acc": 11,
+        "total_acc": 26,
+        "delinq_2yrs": 0,
+        "pub_rec": 0,
+        "emp_length_years": 7,
+        "home_ownership": "RENT",
+        "purpose": "debt_consolidation"
+      }
+    },
+    {
+      "loan_id": "10984",
+      "credit_score": 673,
+      "risk_grade": "C",
+      "risk_grade_label": "Standard (Fair)",
+      "grade_color": "#f59e0b",
+      "actual_outcome": "Non-Default",
+      "explanation": {
+        "predicted_probability": 0.1175,
+        "baseline_probability": 0.2444,
+        "risk_status": "Low-to-Medium Risk / Approved",
+        "waterfall_decomposition": [
+          {
+            "feature": "fico_score",
+            "contribution": -0.3678,
+            "abs_contribution": 0.3678,
+            "direction": "Risk Decreased",
+            "raw_value": "716"
+          },
+          {
+            "feature": "dti",
+            "contribution": 0.2858,
+            "abs_contribution": 0.2858,
+            "direction": "Risk Increased",
+            "raw_value": "23.14"
+          },
+          {
+            "feature": "delinq_2yrs",
+            "contribution": -0.1923,
+            "abs_contribution": 0.1923,
+            "direction": "Risk Decreased",
+            "raw_value": "0"
+          },
+          {
+            "feature": "purpose_credit_card",
+            "contribution": -0.1271,
+            "abs_contribution": 0.1271,
+            "direction": "Risk Decreased",
+            "raw_value": "N/A"
+          },
+          {
+            "feature": "purpose_debt_consolidation",
+            "contribution": 0.1025,
+            "abs_contribution": 0.1025,
+            "direction": "Risk Increased",
+            "raw_value": "N/A"
+          },
+          {
+            "feature": "installment",
+            "contribution": -0.0952,
+            "abs_contribution": 0.0952,
+            "direction": "Risk Decreased",
+            "raw_value": "191.06"
+          }
+        ],
+        "adverse_action_notices": [
+          {
+            "factor": "dti",
+            "reason_code": "High debt-to-income (DTI) ratio relative to income",
+            "impact_magnitude": 0.2858,
+            "observed_value": "23.14"
+          },
+          {
+            "factor": "purpose_debt_consolidation",
+            "reason_code": "Adverse risk factor: purpose_debt_consolidation",
+            "impact_magnitude": 0.1025,
+            "observed_value": "N/A"
+          }
+        ]
+      },
+      "applicant_data": {
+        "loan_id": 10984,
+        "loan_amnt": 5000,
+        "term_months": 36,
+        "int_rate": 22.04,
+        "installment": 191.06,
+        "annual_inc": 72200.0,
+        "dti": 23.14,
+        "fico_score": 716,
+        "revol_util": 50.2,
+        "open_acc": 11,
+        "total_acc": 27,
+        "delinq_2yrs": 0,
+        "pub_rec": 0,
+        "emp_length_years": 1,
+        "home_ownership": "RENT",
+        "purpose": "credit_card"
+      }
+    },
+    {
+      "loan_id": "10481",
+      "credit_score": 652,
+      "risk_grade": "C",
+      "risk_grade_label": "Standard (Fair)",
+      "grade_color": "#f59e0b",
+      "actual_outcome": "Non-Default",
+      "explanation": {
+        "predicted_probability": 0.1677,
+        "baseline_probability": 0.2444,
+        "risk_status": "Low-to-Medium Risk / Approved",
+        "waterfall_decomposition": [
+          {
+            "feature": "revol_util",
+            "contribution": -0.4767,
+            "abs_contribution": 0.4767,
+            "direction": "Risk Decreased",
+            "raw_value": "35.3"
+          },
+          {
+            "feature": "fico_score",
+            "contribution": 0.378,
+            "abs_contribution": 0.378,
+            "direction": "Risk Increased",
+            "raw_value": "670"
+          },
+          {
+            "feature": "annual_inc",
+            "contribution": 0.2279,
+            "abs_contribution": 0.2279,
+            "direction": "Risk Increased",
+            "raw_value": "56000.0"
+          },
+          {
+            "feature": "dti",
+            "contribution": 0.1957,
+            "abs_contribution": 0.1957,
+            "direction": "Risk Increased",
+            "raw_value": "21.58"
+          },
+          {
+            "feature": "delinq_2yrs",
+            "contribution": -0.1923,
+            "abs_contribution": 0.1923,
+            "direction": "Risk Decreased",
+            "raw_value": "0"
+          },
+          {
+            "feature": "pub_rec",
+            "contribution": -0.081,
+            "abs_contribution": 0.081,
+            "direction": "Risk Decreased",
+            "raw_value": "0"
+          }
+        ],
+        "adverse_action_notices": [
+          {
+            "factor": "fico_score",
+            "reason_code": "Credit score (FICO) below lending threshold",
+            "impact_magnitude": 0.378,
+            "observed_value": "670"
+          },
+          {
+            "factor": "annual_inc",
+            "reason_code": "Insufficient verifiable annual income for debt burden",
+            "impact_magnitude": 0.2279,
+            "observed_value": "56000.0"
+          },
+          {
+            "factor": "dti",
+            "reason_code": "High debt-to-income (DTI) ratio relative to income",
+            "impact_magnitude": 0.1957,
+            "observed_value": "21.58"
+          }
+        ]
+      },
+      "applicant_data": {
+        "loan_id": 10481,
+        "loan_amnt": 15000,
+        "term_months": 36,
+        "int_rate": 24.26,
+        "installment": 590.54,
+        "annual_inc": 56000.0,
+        "dti": 21.58,
+        "fico_score": 670,
+        "revol_util": 35.3,
+        "open_acc": 10,
+        "total_acc": 20,
+        "delinq_2yrs": 0,
+        "pub_rec": 0,
+        "emp_length_years": 7,
+        "home_ownership": "OWN",
+        "purpose": "debt_consolidation"
+      }
+    },
+    {
+      "loan_id": "11129",
+      "credit_score": 752,
+      "risk_grade": "A",
+      "risk_grade_label": "Prime (Excellent)",
+      "grade_color": "#10b981",
+      "actual_outcome": "Non-Default",
+      "explanation": {
+        "predicted_probability": 0.027,
+        "baseline_probability": 0.2444,
+        "risk_status": "Low-to-Medium Risk / Approved",
+        "waterfall_decomposition": [
+          {
+            "feature": "revol_util",
+            "contribution": -1.1578,
+            "abs_contribution": 1.1578,
+            "direction": "Risk Decreased",
+            "raw_value": "12.4"
+          },
+          {
+            "feature": "fico_score",
+            "contribution": -0.8866,
+            "abs_contribution": 0.8866,
+            "direction": "Risk Decreased",
+            "raw_value": "748"
+          },
+          {
+            "feature": "pub_rec",
+            "contribution": 0.5419,
+            "abs_contribution": 0.5419,
+            "direction": "Risk Increased",
+            "raw_value": "1"
+          },
+          {
+            "feature": "purpose_major_purchase",
+            "contribution": -0.2833,
+            "abs_contribution": 0.2833,
+            "direction": "Risk Decreased",
+            "raw_value": "N/A"
+          },
+          {
+            "feature": "delinq_2yrs",
+            "contribution": -0.1923,
+            "abs_contribution": 0.1923,
+            "direction": "Risk Decreased",
+            "raw_value": "0"
+          },
+          {
+            "feature": "annual_inc",
+            "contribution": -0.1648,
+            "abs_contribution": 0.1648,
+            "direction": "Risk Decreased",
+            "raw_value": "85000.0"
+          }
+        ],
+        "adverse_action_notices": [
+          {
+            "factor": "pub_rec",
+            "reason_code": "Public derogatory records or collections reported",
+            "impact_magnitude": 0.5419,
+            "observed_value": "1"
+          }
+        ]
+      },
+      "applicant_data": {
+        "loan_id": 11129,
+        "loan_amnt": 10000,
+        "term_months": 36,
+        "int_rate": 17.44,
+        "installment": 358.72,
+        "annual_inc": 85000.0,
+        "dti": 17.09,
+        "fico_score": 748,
+        "revol_util": 12.4,
+        "open_acc": 11,
+        "total_acc": 26,
+        "delinq_2yrs": 0,
+        "pub_rec": 1,
+        "emp_length_years": 10,
+        "home_ownership": "MORTGAGE",
+        "purpose": "major_purchase"
+      }
+    }
+  ],
+  "portfolio_impact": {
+    "threshold_used": 0.2,
+    "total_applications": 300,
+    "approved_count": 153,
+    "approval_rate_pct": 51.0,
+    "total_originated_volume": 2200500.0,
+    "expected_interest_revenue": 446117.5,
+    "expected_default_loss": 120018.49,
+    "net_expected_profit": 326099.01,
+    "roi_pct": 14.82,
+    "grade_distribution": {
+      "A": 20,
+      "B": 39,
+      "C": 81,
+      "D": 91,
+      "E": 48,
+      "HR": 21
+    },
+    "cutoff_optimization_curve": [
+      {
+        "threshold": 0.05,
+        "approval_rate": 12.7,
+        "origination_volume": 521000.0,
+        "expected_loss": 8351.91,
+        "net_profit": 84894.44
+      },
+      {
+        "threshold": 0.08,
+        "approval_rate": 20.3,
+        "origination_volume": 818000.0,
+        "expected_loss": 18830.83,
+        "net_profit": 131715.82
+      },
+      {
+        "threshold": 0.1,
+        "approval_rate": 26.7,
+        "origination_volume": 1069500.0,
+        "expected_loss": 31186.83,
+        "net_profit": 172579.17
+      },
+      {
+        "threshold": 0.12,
+        "approval_rate": 36.0,
+        "origination_volume": 1515500.0,
+        "expected_loss": 59245.44,
+        "net_profit": 238157.11
+      },
+      {
+        "threshold": 0.15,
+        "approval_rate": 40.3,
+        "origination_volume": 1705000.0,
+        "expected_loss": 73256.41,
+        "net_profit": 262957.14
+      },
+      {
+        "threshold": 0.18,
+        "approval_rate": 46.7,
+        "origination_volume": 1997500.0,
+        "expected_loss": 99469.27,
+        "net_profit": 301424.58
+      },
+      {
+        "threshold": 0.2,
+        "approval_rate": 51.0,
+        "origination_volume": 2200500.0,
+        "expected_loss": 120018.49,
+        "net_profit": 326099.01
+      },
+      {
+        "threshold": 0.23,
+        "approval_rate": 54.0,
+        "origination_volume": 2352000.0,
+        "expected_loss": 137691.87,
+        "net_profit": 343750.18
+      },
+      {
+        "threshold": 0.25,
+        "approval_rate": 59.0,
+        "origination_volume": 2576000.0,
+        "expected_loss": 166855.17,
+        "net_profit": 368825.68
+      },
+      {
+        "threshold": 0.28,
+        "approval_rate": 64.7,
+        "origination_volume": 2827000.0,
+        "expected_loss": 202915.36,
+        "net_profit": 392289.99
+      },
+      {
+        "threshold": 0.3,
+        "approval_rate": 69.7,
+        "origination_volume": 3054500.0,
+        "expected_loss": 238907.11,
+        "net_profit": 411563.99
+      },
+      {
+        "threshold": 0.32,
+        "approval_rate": 72.3,
+        "origination_volume": 3176500.0,
+        "expected_loss": 259603.85,
+        "net_profit": 420269.35
+      },
+      {
+        "threshold": 0.35,
+        "approval_rate": 75.3,
+        "origination_volume": 3306500.0,
+        "expected_loss": 283698.39,
+        "net_profit": 427906.31
+      },
+      {
+        "threshold": 0.38,
+        "approval_rate": 77.7,
+        "origination_volume": 3391000.0,
+        "expected_loss": 300368.89,
+        "net_profit": 432177.06
+      },
+      {
+        "threshold": 0.4,
+        "approval_rate": 80.7,
+        "origination_volume": 3526500.0,
+        "expected_loss": 329171.53,
+        "net_profit": 435030.27
+      },
+      {
+        "threshold": 0.42,
+        "approval_rate": 83.0,
+        "origination_volume": 3646000.0,
+        "expected_loss": 356463.31,
+        "net_profit": 435511.24
+      },
+      {
+        "threshold": 0.45,
+        "approval_rate": 86.7,
+        "origination_volume": 3826000.0,
+        "expected_loss": 399643.94,
+        "net_profit": 437017.61
+      }
+    ]
+  }
+}

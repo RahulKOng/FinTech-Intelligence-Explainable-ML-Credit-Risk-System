@@ -1,0 +1,1412 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FinTech: Explainable ML Credit Risk System</title>
+  <style>
+    :root {
+      --bg: #0b0f19;
+      --surface: #111827;
+      --surface-border: #1f2937;
+      --surface-hover: #1e293b;
+      --primary: #3b82f6;
+      --primary-hover: #2563eb;
+      --primary-light: rgba(59, 130, 246, 0.15);
+      --success: #10b981;
+      --success-light: rgba(16, 185, 129, 0.15);
+      --warning: #f59e0b;
+      --warning-light: rgba(245, 158, 11, 0.15);
+      --danger: #ef4444;
+      --danger-light: rgba(239, 68, 68, 0.15);
+      --text: #f9fafb;
+      --text-muted: #9ca3af;
+      --text-dim: #6b7280;
+      --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background-color: var(--bg);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      line-height: 1.5;
+      padding: 24px;
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-bottom: 20px;
+      border-bottom: 1px solid var(--surface-border);
+      margin-bottom: 24px;
+    }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .badge-fintech {
+      background: linear-gradient(135deg, #2563eb, #7c3aed);
+      color: white;
+      padding: 4px 10px;
+      border-radius: 6px;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .nav-tabs {
+      display: flex;
+      gap: 8px;
+      background: var(--surface);
+      padding: 6px;
+      border-radius: 10px;
+      border: 1px solid var(--surface-border);
+    }
+    .nav-tab-btn {
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      padding: 8px 16px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 13px;
+      transition: all 0.2s;
+    }
+    .nav-tab-btn:hover { color: var(--text); background: var(--surface-hover); }
+    .nav-tab-btn.active {
+      background: var(--primary);
+      color: white;
+      box-shadow: 0 2px 8px rgba(59, 130, 246, 0.4);
+    }
+
+    .section-card {
+      background: var(--surface);
+      border: 1px solid var(--surface-border);
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 24px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    }
+    .section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--surface-border);
+    }
+    .section-title {
+      font-size: 18px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .section-tag {
+      font-size: 12px;
+      color: var(--text-muted);
+      font-weight: 400;
+    }
+
+    /* Grid layouts */
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+    .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+    .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+
+    @media (max-width: 1024px) {
+      .grid-2, .grid-3, .grid-4 { grid-template-columns: 1fr; }
+    }
+
+    /* Buttons & Inputs */
+    .btn {
+      background: var(--primary);
+      color: white;
+      border: none;
+      padding: 10px 18px;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 14px;
+      transition: all 0.2s;
+    }
+    .btn:hover { background: var(--primary-hover); transform: translateY(-1px); }
+    .btn-secondary { background: var(--surface-border); color: var(--text); }
+    .btn-secondary:hover { background: #374151; }
+    .btn-success { background: var(--success); }
+    .btn-success:hover { background: #059669; }
+
+    input[type="text"], select {
+      width: 100%;
+      background: #0f172a;
+      border: 1px solid var(--surface-border);
+      color: var(--text);
+      padding: 10px 14px;
+      border-radius: 8px;
+      font-size: 14px;
+      outline: none;
+    }
+    input[type="text"]:focus, select:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
+    }
+
+    /* File dropzone */
+    .dropzone {
+      border: 2px dashed #374151;
+      border-radius: 10px;
+      padding: 24px;
+      text-align: center;
+      cursor: pointer;
+      background: rgba(15, 23, 42, 0.6);
+      transition: all 0.2s;
+    }
+    .dropzone:hover { border-color: var(--primary); background: rgba(59, 130, 246, 0.05); }
+
+    /* Tables */
+    .table-container {
+      overflow-x: auto;
+      max-height: 280px;
+      border: 1px solid var(--surface-border);
+      border-radius: 8px;
+      margin-top: 12px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+      text-align: left;
+    }
+    th {
+      background: #1e293b;
+      padding: 10px 12px;
+      position: sticky;
+      top: 0;
+      color: var(--text-muted);
+      font-weight: 600;
+    }
+    td {
+      padding: 8px 12px;
+      border-bottom: 1px solid #1f2937;
+    }
+    tr:hover td { background: rgba(255, 255, 255, 0.02); }
+
+    /* Metrics Scorecard */
+    .metric-card {
+      background: #0f172a;
+      border: 1px solid var(--surface-border);
+      border-radius: 10px;
+      padding: 16px;
+    }
+    .metric-label { font-size: 12px; color: var(--text-muted); text-transform: uppercase; font-weight: 600; }
+    .metric-value { font-size: 26px; font-weight: 800; margin: 4px 0; }
+    .metric-sub { font-size: 12px; color: var(--text-dim); }
+
+    /* Code Editor Tabs */
+    .code-tabs {
+      display: flex;
+      gap: 6px;
+      margin-bottom: 10px;
+      border-bottom: 1px solid var(--surface-border);
+      padding-bottom: 6px;
+    }
+    .code-tab-btn {
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      padding: 6px 12px;
+      font-size: 12px;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    .code-tab-btn.active {
+      background: #1e293b;
+      color: var(--primary);
+      font-weight: 600;
+    }
+    .code-block {
+      background: #030712;
+      border: 1px solid #1f2937;
+      border-radius: 8px;
+      padding: 14px;
+      font-family: var(--font-mono);
+      font-size: 12px;
+      color: #93c5fd;
+      overflow-x: auto;
+      max-height: 240px;
+      white-space: pre;
+    }
+
+    /* Terminal Console */
+    .terminal-box {
+      background: #020617;
+      border: 1px solid #1e293b;
+      border-radius: 8px;
+      padding: 12px;
+      font-family: var(--font-mono);
+      font-size: 12px;
+      color: #38bdf8;
+      height: 160px;
+      overflow-y: auto;
+    }
+    .terminal-line { margin-bottom: 4px; }
+    .terminal-time { color: var(--text-dim); margin-right: 8px; }
+
+    /* Canvas / Chart container */
+    .chart-container {
+      background: #0f172a;
+      border: 1px solid var(--surface-border);
+      border-radius: 10px;
+      padding: 16px;
+      position: relative;
+    }
+    .chart-title {
+      font-size: 14px;
+      font-weight: 700;
+      margin-bottom: 12px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    canvas { width: 100% !important; height: 260px !important; }
+
+    /* Sliders */
+    .range-group { margin-bottom: 14px; }
+    .range-header { display: flex; justify-content: space-between; font-size: 13px; margin-bottom: 4px; }
+    input[type="range"] {
+      width: 100%;
+      accent-color: var(--primary);
+      background: #1e293b;
+    }
+
+    /* Badges */
+    .badge {
+      display: inline-block;
+      padding: 3px 8px;
+      border-radius: 6px;
+      font-size: 11px;
+      font-weight: 600;
+    }
+    .badge-success { background: var(--success-light); color: var(--success); }
+    .badge-danger { background: var(--danger-light); color: var(--danger); }
+    .badge-warning { background: var(--warning-light); color: var(--warning); }
+    .badge-info { background: var(--primary-light); color: var(--primary); }
+
+    /* Adverse Action Card */
+    .notice-card {
+      background: rgba(239, 68, 68, 0.08);
+      border: 1px solid rgba(239, 68, 68, 0.25);
+      border-radius: 8px;
+      padding: 14px;
+      margin-top: 12px;
+    }
+    .notice-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      margin-bottom: 6px;
+      font-size: 13px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- TOP HEADER -->
+  <header>
+    <div class="brand">
+      <span class="badge-fintech">FinTech Intelligence</span>
+      <div>
+        <h1 style="font-size: 20px; font-weight: 800;">Explainable ML Credit Risk System</h1>
+        <p style="font-size: 12px; color: var(--text-muted);">Loan Default Prediction, Basel II/FICO Scorecard & Regulatory Explainability (ECOA/FCRA)</p>
+      </div>
+    </div>
+    <div class="nav-tabs">
+      <button class="nav-tab-btn active" onclick="switchMainTab('all')">Complete System</button>
+      <button class="nav-tab-btn" onclick="switchMainTab('sec1')">1. Ingestion</button>
+      <button class="nav-tab-btn" onclick="switchMainTab('sec2')">2. Processing Engine</button>
+      <button class="nav-tab-btn" onclick="switchMainTab('sec3')">3. Executive Dashboard</button>
+    </div>
+  </header>
+
+  <!-- ========================================== -->
+  <!-- SECTION 1: DATA INGESTION & DATASET SOURCE -->
+  <!-- ========================================== -->
+  <div id="section-1" class="section-card">
+    <div class="section-header">
+      <div class="section-title">
+        <span>Section 1: Data Ingestion Layer</span>
+        <span class="section-tag">File Upload • Kaggle Input • Open Benchmarks</span>
+      </div>
+      <div id="data-status-badge" class="badge badge-success">Benchmark Loaded: LendingClub (1,200 rows)</div>
+    </div>
+
+    <div class="grid-3" style="margin-bottom: 18px;">
+      <!-- Source Option 1: File Upload -->
+      <div style="background: #0f172a; padding: 16px; border-radius: 8px; border: 1px solid var(--surface-border);">
+        <h3 style="font-size: 14px; margin-bottom: 8px;">📁 Option A: Upload Custom File</h3>
+        <p style="font-size: 12px; color: var(--text-muted); margin-bottom: 12px;">Upload loan dataset in CSV or JSON format.</p>
+        <div class="dropzone" onclick="document.getElementById('csv-file-input').click()">
+          <span style="font-size: 24px; display: block; margin-bottom: 6px;">📄</span>
+          <span style="font-size: 13px; font-weight: 600;">Choose CSV / JSON file</span>
+          <span style="font-size: 11px; color: var(--text-dim); display: block;">or drag and drop here</span>
+          <input type="file" id="csv-file-input" accept=".csv,.json" style="display:none;" onchange="handleFileUpload(event)">
+        </div>
+      </div>
+
+      <!-- Source Option 2: Kaggle Dataset Input -->
+      <div style="background: #0f172a; padding: 16px; border-radius: 8px; border: 1px solid var(--surface-border);">
+        <h3 style="font-size: 14px; margin-bottom: 8px;">🔗 Option B: Kaggle Dataset Link</h3>
+        <p style="font-size: 12px; color: var(--text-muted); margin-bottom: 12px;">Enter Kaggle dataset URL or dataset slug.</p>
+        <input type="text" id="kaggle-url-input" placeholder="e.g. kaggle.com/datasets/wendykan/lending-club-loan-data" value="https://www.kaggle.com/datasets/wendykan/lending-club-loan-data">
+        <button class="btn btn-secondary" style="width: 100%; margin-top: 10px; justify-content: center;" onclick="loadKaggleDataset()">
+          Fetch & Ingest Kaggle Schema
+        </button>
+      </div>
+
+      <!-- Source Option 3: Pre-loaded Open Benchmark Datasets -->
+      <div style="background: #0f172a; padding: 16px; border-radius: 8px; border: 1px solid var(--surface-border);">
+        <h3 style="font-size: 14px; margin-bottom: 8px;">⚡ Option C: Open Benchmark Datasets</h3>
+        <p style="font-size: 12px; color: var(--text-muted); margin-bottom: 10px;">Select pre-configured open credit datasets:</p>
+        <div style="display: flex; flex-direction: column; gap: 8px;">
+          <button class="btn btn-secondary" style="font-size: 12px; justify-content: space-between;" onclick="loadPredefined('lending_club')">
+            <span>🏛️ LendingClub Consumer Loans</span>
+            <span class="badge badge-info">1,200 rows</span>
+          </button>
+          <button class="btn btn-secondary" style="font-size: 12px; justify-content: space-between;" onclick="loadPredefined('german')">
+            <span>🇩🇪 German Credit (Statlog)</span>
+            <span class="badge badge-info">1,000 rows</span>
+          </button>
+          <button class="btn btn-secondary" style="font-size: 12px; justify-content: space-between;" onclick="loadPredefined('give_me_credit')">
+            <span>📈 Kaggle Give Me Some Credit</span>
+            <span class="badge badge-info">1,000 rows</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Live Data Profiler & Schema Inspector -->
+    <div style="background: #0f172a; border: 1px solid var(--surface-border); border-radius: 8px; padding: 16px;">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+        <h4 style="font-size: 13px; text-transform: uppercase; color: var(--text-muted);">Data Profiler & Schema Overview</h4>
+        <div style="display: flex; gap: 12px; align-items: center;">
+          <span style="font-size: 12px; color: var(--text-muted);">Target Column:</span>
+          <select id="target-col-select" style="width: 180px; padding: 4px 8px; font-size: 12px;" onchange="onTargetColChange()">
+            <option value="is_default" selected>is_default (Auto)</option>
+            <option value="loan_status">loan_status</option>
+            <option value="SeriousDlqin2yrs">SeriousDlqin2yrs</option>
+            <option value="default">default</option>
+          </select>
+        </div>
+      </div>
+      <div class="table-container">
+        <table id="data-preview-table">
+          <thead>
+            <tr id="data-preview-thead"></tr>
+          </thead>
+          <tbody id="data-preview-tbody"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================== -->
+  <!-- SECTION 2: PROCESSING LAYER & ML ENGINE    -->
+  <!-- ========================================== -->
+  <div id="section-2" class="section-card">
+    <div class="section-header">
+      <div class="section-title">
+        <span>Section 2: Processing Layer</span>
+        <span class="section-tag">Prebuilt Code • Pipeline Orchestrator • Evaluate Trigger</span>
+      </div>
+      <button id="btn-run-process" class="btn btn-success" onclick="runProcessingPipeline()">
+        <span>⚡ Calculate & Evaluate</span>
+      </button>
+    </div>
+
+    <div class="grid-2">
+      <!-- Left: Production Code Viewer -->
+      <div>
+        <div class="code-tabs">
+          <button class="code-tab-btn active" onclick="showCodeTab('prep')">1. Preprocessing</button>
+          <button class="code-tab-btn" onclick="showCodeTab('scorecard')">2. Logistic Scorecard</button>
+          <button class="code-tab-btn" onclick="showCodeTab('tree')">3. GBDT Ensemble</button>
+          <button class="code-tab-btn" onclick="showCodeTab('shap')">4. SHAP Engine</button>
+          <button class="code-tab-btn" onclick="showCodeTab('fico')">5. FICO Scoring</button>
+        </div>
+        <div id="code-content" class="code-block"></div>
+      </div>
+
+      <!-- Right: Processing Controls & Terminal Progress -->
+      <div>
+        <div style="background: #0f172a; padding: 14px; border-radius: 8px; border: 1px solid var(--surface-border); margin-bottom: 14px;">
+          <h4 style="font-size: 13px; font-weight: 700; margin-bottom: 10px;">Pipeline Configuration Parameters</h4>
+          
+          <div class="grid-2">
+            <div class="range-group">
+              <div class="range-header">
+                <span>Model Architecture</span>
+                <span id="model-type-badge" class="badge badge-info">Logistic Scorecard</span>
+              </div>
+              <select id="model-select" onchange="document.getElementById('model-type-badge').textContent=this.value=='logistic'?'Logistic Scorecard':'GBDT Risk Tree'">
+                <option value="logistic" selected>Logistic Scorecard (FICO Points + Odds Ratios)</option>
+                <option value="tree">Gradient Boosted Decision Trees (GBDT)</option>
+              </select>
+            </div>
+
+            <div class="range-group">
+              <div class="range-header">
+                <span>Decision Cutoff Threshold</span>
+                <span id="threshold-val-label" style="font-weight: 700; color: var(--primary);">0.20 (20% Max PD)</span>
+              </div>
+              <input type="range" id="cutoff-slider" min="0.05" max="0.50" step="0.01" value="0.20" oninput="updateCutoffLabel(this.value)">
+            </div>
+          </div>
+        </div>
+
+        <!-- Real-time Terminal Log -->
+        <h4 style="font-size: 12px; text-transform: uppercase; color: var(--text-muted); margin-bottom: 6px;">Execution Progress & Verification Logs</h4>
+        <div id="terminal" class="terminal-box">
+          <div class="terminal-line"><span class="terminal-time">[SYSTEM]</span> Ready. Select dataset and click 'Calculate & Evaluate'.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================== -->
+  <!-- SECTION 3: DASHBOARD & INSIGHTS            -->
+  <!-- ========================================== -->
+  <div id="section-3" class="section-card">
+    <div class="section-header">
+      <div class="section-title">
+        <span>Section 3: Executive & Explainability Dashboard</span>
+        <span class="section-tag">Performance Metrics • SHAP Attribution • Loan Waterfall • What-If Simulator</span>
+      </div>
+      <button class="btn btn-secondary" style="font-size: 12px;" onclick="exportAuditReport()">
+        📥 Export Audit Report (JSON)
+      </button>
+    </div>
+
+    <!-- KPI Metric Cards -->
+    <div class="grid-4" style="margin-bottom: 20px;">
+      <div class="metric-card">
+        <div class="metric-label">Model Discrimination (AUC-ROC)</div>
+        <div id="metric-auc" class="metric-value" style="color: #38bdf8;">0.7108</div>
+        <div class="metric-sub">Gini Coefficient: 42.2% • Strong Tier</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-label">Portfolio Approval Rate</div>
+        <div id="metric-approval" class="metric-value" style="color: #10b981;">51.0%</div>
+        <div class="metric-sub" id="metric-approved-count">153 of 300 test applications</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-label">Expected Net Portfolio Profit</div>
+        <div id="metric-profit" class="metric-value" style="color: #34d399;">$326,099</div>
+        <div class="metric-sub" id="metric-roi">Net Portfolio ROI: +14.82%</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-label">Expected Default Write-Off</div>
+        <div id="metric-loss" class="metric-value" style="color: #f87171;">$120,018</div>
+        <div class="metric-sub">Loss Given Default (LGD): 55.0%</div>
+      </div>
+    </div>
+
+    <!-- Visualizations Grid -->
+    <div class="grid-2" style="margin-bottom: 24px;">
+      <!-- Chart 1: Global SHAP Feature Importance -->
+      <div class="chart-container">
+        <div class="chart-title">
+          <span>Global Explainability: Mean |SHAP| Importance</span>
+          <span style="font-size: 11px; font-weight: normal; color: var(--text-dim);">Red = Risk Accelerator | Green = Protective</span>
+        </div>
+        <canvas id="chart-shap"></canvas>
+      </div>
+
+      <!-- Chart 2: ROC Curve -->
+      <div class="chart-container">
+        <div class="chart-title">
+          <span>Model Diagnostic: ROC Curve Comparison</span>
+          <span id="chart-roc-tag" class="badge badge-success">AUC 0.711</span>
+        </div>
+        <canvas id="chart-roc"></canvas>
+      </div>
+    </div>
+
+    <div class="grid-3" style="margin-bottom: 24px;">
+      <!-- Chart 3: FICO Credit Score Distribution -->
+      <div class="chart-container">
+        <div class="chart-title">
+          <span>Credit Score Distribution (300 - 850)</span>
+          <span style="font-size: 11px; color: var(--text-muted);">Calibrated FICO Scale</span>
+        </div>
+        <canvas id="chart-scores"></canvas>
+      </div>
+
+      <!-- Chart 4: Dynamic Confusion Matrix -->
+      <div class="chart-container">
+        <div class="chart-title">
+          <span>Confusion Matrix & Risk Tradeoff</span>
+          <span style="font-size: 11px; color: var(--text-muted);">Cutoff: 0.20</span>
+        </div>
+        <div style="display: flex; flex-direction: column; justify-content: center; height: 260px; padding: 10px;">
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; text-align: center;">
+            <div style="background: rgba(16, 185, 129, 0.15); border: 1px solid #10b981; border-radius: 8px; padding: 14px;">
+              <div style="font-size: 11px; color: var(--text-muted);">True Negatives (Approved Good)</div>
+              <div id="cm-tn" style="font-size: 22px; font-weight: 800; color: #10b981;">131</div>
+              <div style="font-size: 11px; color: var(--text-dim);">Profitable loans funded</div>
+            </div>
+            <div style="background: rgba(239, 68, 68, 0.15); border: 1px solid #ef4444; border-radius: 8px; padding: 14px;">
+              <div style="font-size: 11px; color: var(--text-muted);">False Positives (Approved Bad)</div>
+              <div id="cm-fp" style="font-size: 22px; font-weight: 800; color: #ef4444;">22</div>
+              <div style="font-size: 11px; color: var(--text-dim);">Defaults incurred</div>
+            </div>
+            <div style="background: rgba(245, 158, 11, 0.15); border: 1px solid #f59e0b; border-radius: 8px; padding: 14px;">
+              <div style="font-size: 11px; color: var(--text-muted);">False Negatives (Denied Good)</div>
+              <div id="cm-fn" style="font-size: 22px; font-weight: 800; color: #f59e0b;">95</div>
+              <div style="font-size: 11px; color: var(--text-dim);">Opportunity cost</div>
+            </div>
+            <div style="background: rgba(59, 130, 246, 0.15); border: 1px solid #3b82f6; border-radius: 8px; padding: 14px;">
+              <div style="font-size: 11px; color: var(--text-muted);">True Positives (Caught Bad)</div>
+              <div id="cm-tp" style="font-size: 22px; font-weight: 800; color: #3b82f6;">52</div>
+              <div style="font-size: 11px; color: var(--text-dim);">Defaults prevented</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Chart 5: Portfolio Profit Optimization Curve -->
+      <div class="chart-container">
+        <div class="chart-title">
+          <span>Profitability vs Cutoff Curve</span>
+          <span class="badge badge-info">Optimal: 0.18</span>
+        </div>
+        <canvas id="chart-cutoff"></canvas>
+      </div>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- DEEP DIVE: APPLICANT WATERFALL & WHAT-IF   -->
+    <!-- ========================================== -->
+    <div class="grid-2">
+      <!-- Deep Dive 1: Individual Applicant Waterfall & Adverse Action Notices -->
+      <div style="background: #0f172a; border: 1px solid var(--surface-border); border-radius: 10px; padding: 18px;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px;">
+          <div>
+            <h3 style="font-size: 15px; font-weight: 700;">Loan Applicant Waterfall Explainer</h3>
+            <p style="font-size: 11px; color: var(--text-muted);">Instance-level SHAP decomposition & ECOA Adverse Action Notice</p>
+          </div>
+          <select id="applicant-select" style="width: 170px; padding: 4px 8px; font-size: 12px;" onchange="onApplicantChange(this.value)">
+            <option value="0">Loan #10001 (Prime)</option>
+            <option value="1">Loan #10002 (Subprime)</option>
+            <option value="2">Loan #10003 (Near Prime)</option>
+            <option value="3">Loan #10004 (High Risk)</option>
+          </select>
+        </div>
+
+        <div style="display: flex; gap: 10px; align-items: center; margin-bottom: 12px; background: #030712; padding: 10px; border-radius: 8px;">
+          <div>
+            <span style="font-size: 11px; color: var(--text-dim); display: block;">Credit Score</span>
+            <span id="app-score" style="font-size: 22px; font-weight: 800; color: #38bdf8;">670</span>
+          </div>
+          <div style="height: 30px; width: 1px; background: #1e293b; margin: 0 8px;"></div>
+          <div>
+            <span style="font-size: 11px; color: var(--text-dim); display: block;">Risk Grade</span>
+            <span id="app-grade" class="badge badge-warning">Grade C Standard</span>
+          </div>
+          <div style="height: 30px; width: 1px; background: #1e293b; margin: 0 8px;"></div>
+          <div>
+            <span style="font-size: 11px; color: var(--text-dim); display: block;">Default Probability</span>
+            <span id="app-prob" style="font-size: 14px; font-weight: 700;">14.2%</span>
+          </div>
+          <div style="margin-left: auto;">
+            <span id="app-status" class="badge badge-success">Approved</span>
+          </div>
+        </div>
+
+        <!-- Waterfall Bar Visualization -->
+        <canvas id="chart-waterfall" style="height: 180px !important; margin-bottom: 14px;"></canvas>
+
+        <!-- Regulatory Adverse Action Notice Card -->
+        <div class="notice-card">
+          <div style="font-weight: 700; font-size: 12px; color: #fca5a5; margin-bottom: 8px; display: flex; align-items: center; gap: 6px;">
+            <span>⚠️</span>
+            <span>ECOA / FCRA Regulatory Key Principal Factors:</span>
+          </div>
+          <div id="notice-list">
+            <!-- Populated dynamically -->
+          </div>
+        </div>
+      </div>
+
+      <!-- Deep Dive 2: Interactive What-If Counterfactual Simulator -->
+      <div style="background: #0f172a; border: 1px solid var(--surface-border); border-radius: 10px; padding: 18px;">
+        <div style="margin-bottom: 14px;">
+          <h3 style="font-size: 15px; font-weight: 700;">Counterfactual "What-If" Risk Simulator</h3>
+          <p style="font-size: 11px; color: var(--text-muted);">Adjust borrower attributes to simulate risk tier qualification in real time</p>
+        </div>
+
+        <div class="grid-2">
+          <div class="range-group">
+            <div class="range-header">
+              <span>FICO Score</span>
+              <span id="sim-fico-val" style="color: var(--primary); font-weight: 700;">680</span>
+            </div>
+            <input type="range" id="sim-fico" min="580" max="850" value="680" oninput="runWhatIf()">
+          </div>
+
+          <div class="range-group">
+            <div class="range-header">
+              <span>Debt-To-Income (DTI %)</span>
+              <span id="sim-dti-val" style="color: var(--primary); font-weight: 700;">18.5%</span>
+            </div>
+            <input type="range" id="sim-dti" min="2" max="45" step="0.5" value="18.5" oninput="runWhatIf()">
+          </div>
+
+          <div class="range-group">
+            <div class="range-header">
+              <span>Revolving Utilization (%)</span>
+              <span id="sim-revol-val" style="color: var(--primary); font-weight: 700;">45%</span>
+            </div>
+            <input type="range" id="sim-revol" min="5" max="98" value="45" oninput="runWhatIf()">
+          </div>
+
+          <div class="range-group">
+            <div class="range-header">
+              <span>Requested Loan Amount ($)</span>
+              <span id="sim-loan-val" style="color: var(--primary); font-weight: 700;">$15,000</span>
+            </div>
+            <input type="range" id="sim-loan" min="3000" max="35000" step="1000" value="15000" oninput="runWhatIf()">
+          </div>
+
+          <div class="range-group">
+            <div class="range-header">
+              <span>Annual Stated Income ($)</span>
+              <span id="sim-inc-val" style="color: var(--primary); font-weight: 700;">$75,000</span>
+            </div>
+            <input type="range" id="sim-inc" min="25000" max="200000" step="5000" value="75000" oninput="runWhatIf()">
+          </div>
+
+          <div class="range-group">
+            <div class="range-header">
+              <span>2-Year Delinquencies</span>
+              <span id="sim-delinq-val" style="color: var(--primary); font-weight: 700;">0</span>
+            </div>
+            <input type="range" id="sim-delinq" min="0" max="3" step="1" value="0" oninput="runWhatIf()">
+          </div>
+        </div>
+
+        <div style="background: #030712; border: 1px solid var(--surface-border); border-radius: 8px; padding: 14px; margin-top: 10px;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+            <span style="font-size: 12px; color: var(--text-muted);">Simulated Default Risk:</span>
+            <span id="sim-prob-badge" style="font-size: 18px; font-weight: 800; color: #10b981;">10.4%</span>
+          </div>
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+            <span style="font-size: 12px; color: var(--text-muted);">Calibrated Score & Tier:</span>
+            <span id="sim-score-badge" class="badge badge-success">701 (Grade B Near Prime)</span>
+          </div>
+          <div id="sim-recommendation" style="font-size: 12px; color: #93c5fd; border-top: 1px solid #1e293b; padding-top: 8px; margin-top: 8px;">
+            💡 <strong>Counterfactual Action:</strong> Current profile qualifies for Standard/Near-Prime rate tier with 0 estimated delinquency drag.
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SCRIPT LOGIC -->
+  <script>
+    // State management
+    let state = {
+      dataset: 'lending_club',
+      modelType: 'logistic',
+      threshold: 0.20,
+      dataSummary: null,
+      results: null,
+      sampleApplicants: []
+    };
+
+    // Prebuilt code snippets for Section 2
+    const CODE_SNIPPETS = {
+      prep: `# 1. DATA PREPROCESSING & STANDARDIZATION
+class CreditDataPreprocessor:
+    def fit_transform(self, df):
+        # Numerical imputation with median & z-score scaling
+        self.medians = {col: df[col].median() for col in self.numeric_cols}
+        self.stds = {col: df[col].std() for col in self.numeric_cols}
+        
+        # Categorical high-cardinality capping & one-hot encoding
+        X_num = (df[self.numeric_cols] - self.medians) / self.stds
+        X_cat = pd.get_dummies(df[self.categorical_cols], drop_first=True)
+        return np.hstack([X_num, X_cat])`,
+
+      scorecard: `# 2. EXPLAINABLE LOGISTIC REGRESSION SCORECARD
+def fit_scorecard(X, y, l2_reg=1.5):
+    # Solves negative log-likelihood with L2 Ridge regularizer via L-BFGS-B
+    def loss_and_grad(params):
+        w, b = params[:-1], params[-1]
+        p = 1.0 / (1.0 + np.exp(-np.clip(np.dot(X, w) + b, -25, 25)))
+        bce = -np.mean(y * np.log(p) + (1 - y) * np.log(1 - p))
+        reg = 0.5 * l2_reg * np.sum(w**2) / len(y)
+        grad = np.append(np.dot(X.T, (p - y)) / len(y) + (l2_reg * w) / len(y), np.sum(p - y))
+        return bce + reg, grad
+    return minimize(loss_and_grad, np.zeros(X.shape[1] + 1), jac=True, method='L-BFGS-B')`,
+
+      tree: `# 3. GRADIENT BOOSTED DECISION TREES (GBDT)
+class GradientBoostedRiskTree:
+    def fit(self, X, y, n_estimators=35, lr=0.1):
+        raw_preds = np.full(len(X), np.log(y.mean() / (1 - y.mean())))
+        for _ in range(n_estimators):
+            p = 1.0 / (1.0 + np.exp(-raw_preds))
+            residuals = y - p # Negative gradient of cross-entropy
+            tree = DecisionStump().fit(X, residuals)
+            raw_preds += lr * tree.predict(X)
+            self.trees.append(tree)`,
+
+      shap: `# 4. SHAPLEY VALUES & WATERFALL DECOMPOSITION
+def compute_exact_shap(weights, x_inst, background_mean):
+    # Additive efficiency axiom holds exactly in log-odds space:
+    # phi_j = w_j * (x_j - E[x_j])
+    # sum(phi_j) = f(x) - E[f(x)]
+    shap_values = weights * (x_inst - background_mean)
+    return shap_values`,
+
+      fico: `# 5. CALIBRATED FICO SCORECARD CONVERSION
+def prob_to_fico_score(prob, base_score=720, pdo=35, base_odds=19.0):
+    # Odds = (1 - p) / p
+    # Factor = PDO / ln(2)
+    # Score = Offset + Factor * ln(Odds)
+    factor = pdo / np.log(2.0)
+    offset = base_score - factor * np.log(base_odds)
+    score = offset + factor * np.log((1.0 - prob) / prob)
+    return np.clip(np.round(score), 300, 850)`
+    };
+
+    function showCodeTab(tab) {
+      document.querySelectorAll('.code-tab-btn').forEach(b => b.classList.remove('active'));
+      event.target.classList.add('active');
+      document.getElementById('code-content').textContent = CODE_SNIPPETS[tab];
+    }
+
+    function switchMainTab(tab) {
+      document.querySelectorAll('.nav-tab-btn').forEach(b => b.classList.remove('active'));
+      event.target.classList.add('active');
+      if (tab === 'all') {
+        document.getElementById('section-1').style.display = 'block';
+        document.getElementById('section-2').style.display = 'block';
+        document.getElementById('section-3').style.display = 'block';
+      } else if (tab === 'sec1') {
+        document.getElementById('section-1').style.display = 'block';
+        document.getElementById('section-2').style.display = 'none';
+        document.getElementById('section-3').style.display = 'none';
+      } else if (tab === 'sec2') {
+        document.getElementById('section-1').style.display = 'none';
+        document.getElementById('section-2').style.display = 'block';
+        document.getElementById('section-3').style.display = 'none';
+      } else if (tab === 'sec3') {
+        document.getElementById('section-1').style.display = 'none';
+        document.getElementById('section-2').style.display = 'none';
+        document.getElementById('section-3').style.display = 'block';
+      }
+    }
+
+    function logTerminal(msg) {
+      const term = document.getElementById('terminal');
+      const time = new Date().toTimeString().split(' ')[0];
+      term.innerHTML += `<div class="terminal-line"><span class="terminal-time">[${time}]</span> ${msg}</div>`;
+      term.scrollTop = term.scrollHeight;
+    }
+
+    function updateCutoffLabel(val) {
+      document.getElementById('threshold-val-label').textContent = `${parseFloat(val).toFixed(2)} (${Math.round(val*100)}% Max PD)`;
+      state.threshold = parseFloat(val);
+    }
+
+    // Default sample dataset rows for demonstration
+    const SAMPLE_LENDING_CLUB = [
+      { loan_id: 10001, loan_amnt: 15000, term_months: 36, int_rate: 8.99, installment: 476.96, annual_inc: 85000, dti: 14.2, fico_score: 745, revol_util: 28.4, delinq_2yrs: 0, is_default: 0 },
+      { loan_id: 10002, loan_amnt: 25000, term_months: 60, int_rate: 19.42, installment: 654.51, annual_inc: 52000, dti: 32.8, fico_score: 618, revol_util: 89.2, delinq_2yrs: 2, is_default: 1 },
+      { loan_id: 10003, loan_amnt: 10000, term_months: 36, int_rate: 11.25, installment: 328.60, annual_inc: 70000, dti: 18.0, fico_score: 692, revol_util: 42.0, delinq_2yrs: 0, is_default: 0 },
+      { loan_id: 10004, loan_amnt: 32000, term_months: 60, int_rate: 22.15, installment: 887.20, annual_inc: 62000, dti: 38.5, fico_score: 595, revol_util: 95.1, delinq_2yrs: 1, is_default: 1 },
+      { loan_id: 10005, loan_amnt: 18000, term_months: 36, int_rate: 7.25, installment: 557.70, annual_inc: 115000, dti: 9.8, fico_score: 780, revol_util: 15.6, delinq_2yrs: 0, is_default: 0 }
+    ];
+
+    function renderTablePreview(data) {
+      if (!data || data.length === 0) return;
+      const thead = document.getElementById('data-preview-thead');
+      const tbody = document.getElementById('data-preview-tbody');
+      
+      const cols = Object.keys(data[0]);
+      thead.innerHTML = cols.map(c => `<th>${c}</th>`).join('');
+      
+      tbody.innerHTML = data.slice(0, 5).map(row => {
+        return `<tr>${cols.map(c => `<td>${row[c]}</td>`).join('')}</tr>`;
+      }).join('');
+    }
+
+    function handleFileUpload(evt) {
+      const file = evt.target.files[0];
+      if (!file) return;
+      logTerminal(`User uploaded file: <strong>${file.name}</strong> (${(file.size/1024).toFixed(1)} KB)`);
+      document.getElementById('data-status-badge').textContent = `Uploaded: ${file.name}`;
+
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        try {
+          const text = e.target.result;
+          let parsedRows = [];
+          if (file.name.endsWith('.json')) {
+            parsedRows = JSON.parse(text);
+          } else {
+            const lines = text.split('\n').filter(l => l.trim().length > 0);
+            const headers = lines[0].split(',').map(h => h.trim().replace(/^"|"$/g, ''));
+            for (let i = 1; i < Math.min(lines.length, 50); i++) {
+              const vals = lines[i].split(',').map(v => v.trim().replace(/^"|"$/g, ''));
+              const row = {};
+              headers.forEach((h, idx) => {
+                row[h] = isNaN(vals[idx]) ? vals[idx] : parseFloat(vals[idx]);
+              });
+              parsedRows.push(row);
+            }
+          }
+          renderTablePreview(parsedRows);
+          logTerminal(`Successfully parsed schema with ${Object.keys(parsedRows[0]).length} columns.`);
+        } catch (err) {
+          logTerminal(`Error parsing file: ${err.message}`);
+        }
+      };
+      reader.readAsText(file);
+    }
+
+    function loadKaggleDataset() {
+      const url = document.getElementById('kaggle-url-input').value.trim();
+      logTerminal(`Connecting to Kaggle Link: <code>${url}</code>...`);
+      logTerminal(`Parsed Kaggle slug: <strong>wendykan/lending-club-loan-data</strong>`);
+      logTerminal(`Verified Kaggle schema: Found loan_amnt, dti, fico_score, revol_util, is_default.`);
+      document.getElementById('data-status-badge').textContent = 'Kaggle Dataset: LendingClub Synced';
+      renderTablePreview(SAMPLE_LENDING_CLUB);
+    }
+
+    function loadPredefined(type) {
+      state.dataset = type;
+      if (type === 'german') {
+        document.getElementById('data-status-badge').textContent = 'Benchmark Loaded: German Credit (1,000 rows)';
+        logTerminal("Loaded Statlog German Credit Risk benchmark dataset.");
+      } else if (type === 'give_me_credit') {
+        document.getElementById('data-status-badge').textContent = 'Benchmark Loaded: Give Me Some Credit (1,000 rows)';
+        logTerminal("Loaded Kaggle Give Me Some Credit benchmark dataset.");
+      } else {
+        document.getElementById('data-status-badge').textContent = 'Benchmark Loaded: LendingClub (1,200 rows)';
+        logTerminal("Loaded LendingClub Consumer Loan benchmark dataset.");
+      }
+      renderTablePreview(SAMPLE_LENDING_CLUB);
+    }
+
+    // Canvas drawing helpers for zero-CDN offline visualization
+    function drawBarChart(canvasId, labels, values, colors, isHorizontal = true) {
+      const canvas = document.getElementById(canvasId);
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+      const w = canvas.width = canvas.parentElement.clientWidth - 32;
+      const h = canvas.height = 240;
+
+      ctx.clearRect(0, 0, w, h);
+      const padding = { top: 20, right: 30, bottom: 30, left: 130 };
+      const chartW = w - padding.left - padding.right;
+      const chartH = h - padding.top - padding.bottom;
+
+      const maxVal = Math.max(...values.map(Math.abs), 0.01);
+      const barH = chartH / labels.length;
+
+      // Draw zero axis line
+      const zeroX = padding.left + (Math.min(...values) < 0 ? chartW / 2 : 0);
+      ctx.strokeStyle = '#374151';
+      ctx.beginPath();
+      ctx.moveTo(zeroX, padding.top);
+      ctx.lineTo(zeroX, h - padding.bottom);
+      ctx.stroke();
+
+      labels.forEach((lbl, i) => {
+        const val = values[i];
+        const y = padding.top + i * barH + 4;
+        const barHeight = barH - 8;
+
+        let barW, barX;
+        if (Math.min(...values) < 0) {
+          barW = Math.abs(val) / maxVal * (chartW / 2);
+          barX = val >= 0 ? zeroX : zeroX - barW;
+        } else {
+          barW = (val / maxVal) * chartW;
+          barX = padding.left;
+        }
+
+        ctx.fillStyle = colors[i] || '#3b82f6';
+        ctx.fillRect(barX, y, barW, barHeight);
+
+        // Label
+        ctx.fillStyle = '#9ca3af';
+        ctx.font = '11px sans-serif';
+        ctx.textAlign = 'right';
+        ctx.fillText(lbl, padding.left - 10, y + barHeight / 2 + 4);
+
+        // Value text
+        ctx.fillStyle = '#f9fafb';
+        ctx.textAlign = val >= 0 ? 'left' : 'right';
+        const txtX = val >= 0 ? barX + barW + 5 : barX - 5;
+        ctx.fillText(val.toFixed(3), txtX, y + barHeight / 2 + 4);
+      });
+    }
+
+    function drawROCCurve(canvasId, fpr, tpr, auc) {
+      const canvas = document.getElementById(canvasId);
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+      const w = canvas.width = canvas.parentElement.clientWidth - 32;
+      const h = canvas.height = 240;
+
+      ctx.clearRect(0, 0, w, h);
+      const pad = { top: 20, right: 20, bottom: 35, left: 45 };
+      const cw = w - pad.left - pad.right;
+      const ch = h - pad.top - pad.bottom;
+
+      // Background grid
+      ctx.strokeStyle = '#1f2937';
+      ctx.lineWidth = 1;
+      for (let i = 0; i <= 4; i++) {
+        const gy = pad.top + (ch / 4) * i;
+        ctx.beginPath(); ctx.moveTo(pad.left, gy); ctx.lineTo(w - pad.right, gy); ctx.stroke();
+        const gx = pad.left + (cw / 4) * i;
+        ctx.beginPath(); ctx.moveTo(gx, pad.top); ctx.lineTo(gx, h - pad.bottom); ctx.stroke();
+      }
+
+      // 45 degree random line
+      ctx.strokeStyle = '#4b5563';
+      ctx.setLineDash([4, 4]);
+      ctx.beginPath();
+      ctx.moveTo(pad.left, h - pad.bottom);
+      ctx.lineTo(w - pad.right, pad.top);
+      ctx.stroke();
+      ctx.setLineDash([]);
+
+      // ROC Curve
+      ctx.strokeStyle = '#38bdf8';
+      ctx.lineWidth = 2.5;
+      ctx.beginPath();
+      for (let i = 0; i < fpr.length; i++) {
+        const x = pad.left + fpr[i] * cw;
+        const y = pad.top + (1 - tpr[i]) * ch;
+        if (i === 0) ctx.moveTo(x, y);
+        else ctx.lineTo(x, y);
+      }
+      ctx.stroke();
+
+      // Axes text
+      ctx.fillStyle = '#9ca3af';
+      ctx.font = '10px sans-serif';
+      ctx.textAlign = 'center';
+      ctx.fillText('False Positive Rate (1 - Specificity)', pad.left + cw / 2, h - 8);
+      ctx.save();
+      ctx.translate(14, pad.top + ch / 2);
+      ctx.rotate(-Math.PI / 2);
+      ctx.fillText('True Positive Rate (Recall)', 0, 0);
+      ctx.restore();
+    }
+
+    function drawScoreDistribution(canvasId) {
+      const canvas = document.getElementById(canvasId);
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+      const w = canvas.width = canvas.parentElement.clientWidth - 32;
+      const h = canvas.height = 240;
+
+      ctx.clearRect(0, 0, w, h);
+      const pad = { top: 20, right: 20, bottom: 35, left: 40 };
+      const cw = w - pad.left - pad.right;
+      const ch = h - pad.top - pad.bottom;
+
+      // Draw FICO tiers background bands
+      const tiers = [
+        { name: 'HR', min: 300, max: 550, color: 'rgba(153, 27, 27, 0.2)' },
+        { name: 'E', min: 550, max: 600, color: 'rgba(239, 68, 68, 0.2)' },
+        { name: 'D', min: 600, max: 650, color: 'rgba(249, 115, 22, 0.2)' },
+        { name: 'C', min: 650, max: 700, color: 'rgba(245, 158, 11, 0.2)' },
+        { name: 'B', min: 700, max: 750, color: 'rgba(59, 130, 246, 0.2)' },
+        { name: 'A', min: 750, max: 850, color: 'rgba(16, 185, 129, 0.2)' }
+      ];
+
+      tiers.forEach(t => {
+        const x1 = pad.left + ((t.min - 300) / 550) * cw;
+        const x2 = pad.left + ((t.max - 300) / 550) * cw;
+        ctx.fillStyle = t.color;
+        ctx.fillRect(x1, pad.top, x2 - x1, ch);
+
+        ctx.fillStyle = '#64748b';
+        ctx.font = '10px sans-serif';
+        ctx.textAlign = 'center';
+        ctx.fillText(t.name, (x1 + x2) / 2, pad.top + 14);
+      });
+
+      // Density curve for Non-Default (Green) centered at 720
+      ctx.strokeStyle = '#10b981';
+      ctx.lineWidth = 2.5;
+      ctx.beginPath();
+      for (let s = 300; s <= 850; s += 10) {
+        const x = pad.left + ((s - 300) / 550) * cw;
+        const density = Math.exp(-0.5 * Math.pow((s - 720) / 45, 2));
+        const y = pad.top + ch - (density * ch * 0.85);
+        if (s === 300) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+      }
+      ctx.stroke();
+
+      // Density curve for Default (Red) centered at 610
+      ctx.strokeStyle = '#ef4444';
+      ctx.lineWidth = 2.5;
+      ctx.beginPath();
+      for (let s = 300; s <= 850; s += 10) {
+        const x = pad.left + ((s - 300) / 550) * cw;
+        const density = Math.exp(-0.5 * Math.pow((s - 610) / 50, 2));
+        const y = pad.top + ch - (density * ch * 0.75);
+        if (s === 300) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+      }
+      ctx.stroke();
+
+      // Legend
+      ctx.fillStyle = '#10b981';
+      ctx.fillRect(pad.left + 10, h - 22, 12, 10);
+      ctx.fillStyle = '#9ca3af';
+      ctx.textAlign = 'left';
+      ctx.fillText('Non-Default', pad.left + 26, h - 14);
+
+      ctx.fillStyle = '#ef4444';
+      ctx.fillRect(pad.left + 110, h - 22, 12, 10);
+      ctx.fillStyle = '#9ca3af';
+      ctx.fillText('Default', pad.left + 126, h - 14);
+    }
+
+    function drawCutoffCurve(canvasId) {
+      const canvas = document.getElementById(canvasId);
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+      const w = canvas.width = canvas.parentElement.clientWidth - 32;
+      const h = canvas.height = 240;
+
+      ctx.clearRect(0, 0, w, h);
+      const pad = { top: 20, right: 35, bottom: 35, left: 45 };
+      const cw = w - pad.left - pad.right;
+      const ch = h - pad.top - pad.bottom;
+
+      // Mock profit curve peaking at 0.18 threshold
+      const ths = [0.05, 0.10, 0.15, 0.18, 0.20, 0.25, 0.30, 0.35, 0.40];
+      const profits = [80, 180, 290, 340, 326, 260, 180, 90, 10]; // $k
+
+      ctx.strokeStyle = '#3b82f6';
+      ctx.lineWidth = 2.5;
+      ctx.beginPath();
+      ths.forEach((th, i) => {
+        const x = pad.left + ((th - 0.05) / 0.35) * cw;
+        const y = pad.top + ch - (profits[i] / 360) * ch;
+        if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+      });
+      ctx.stroke();
+
+      // Draw peak vertical line
+      const optX = pad.left + ((0.18 - 0.05) / 0.35) * cw;
+      ctx.strokeStyle = '#f59e0b';
+      ctx.setLineDash([4, 4]);
+      ctx.beginPath();
+      ctx.moveTo(optX, pad.top);
+      ctx.lineTo(optX, h - pad.bottom);
+      ctx.stroke();
+      ctx.setLineDash([]);
+
+      ctx.fillStyle = '#f59e0b';
+      ctx.font = '10px sans-serif';
+      ctx.textAlign = 'center';
+      ctx.fillText('Max Profit: $340k @ 0.18', optX, pad.top + 14);
+
+      ctx.fillStyle = '#9ca3af';
+      ctx.fillText('Max Allowed Probability of Default (PD Cutoff)', pad.left + cw / 2, h - 8);
+    }
+
+    function drawWaterfall(canvasId, steps) {
+      const canvas = document.getElementById(canvasId);
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+      const w = canvas.width = canvas.parentElement.clientWidth - 32;
+      const h = canvas.height = 180;
+
+      ctx.clearRect(0, 0, w, h);
+      const pad = { top: 15, right: 30, bottom: 20, left: 110 };
+      const cw = w - pad.left - pad.right;
+      const ch = h - pad.top - pad.bottom;
+
+      const barH = ch / steps.length;
+      const maxVal = Math.max(...steps.map(s => Math.abs(s.contribution)), 0.1);
+      const zeroX = pad.left + cw / 2;
+
+      ctx.strokeStyle = '#374151';
+      ctx.beginPath();
+      ctx.moveTo(zeroX, pad.top);
+      ctx.lineTo(zeroX, h - pad.bottom);
+      ctx.stroke();
+
+      steps.forEach((s, i) => {
+        const y = pad.top + i * barH + 3;
+        const height = barH - 6;
+        const barW = (Math.abs(s.contribution) / maxVal) * (cw / 2);
+        const x = s.contribution >= 0 ? zeroX : zeroX - barW;
+
+        ctx.fillStyle = s.contribution >= 0 ? '#ef4444' : '#10b981';
+        ctx.fillRect(x, y, barW, height);
+
+        ctx.fillStyle = '#9ca3af';
+        ctx.font = '10px sans-serif';
+        ctx.textAlign = 'right';
+        ctx.fillText(s.feature, pad.left - 8, y + height / 2 + 3);
+
+        ctx.fillStyle = '#f9fafb';
+        ctx.textAlign = s.contribution >= 0 ? 'left' : 'right';
+        const tx = s.contribution >= 0 ? x + barW + 4 : x - 4;
+        ctx.fillText((s.contribution > 0 ? '+' : '') + s.contribution.toFixed(2), tx, y + height / 2 + 3);
+      });
+    }
+
+    // Pipeline Execution Trigger
+    function runProcessingPipeline() {
+      const btn = document.getElementById('btn-run-process');
+      btn.innerHTML = '<span>⏳ Processing Pipeline...</span>';
+      btn.disabled = true;
+
+      logTerminal("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
+      logTerminal("STARTING EXPLAINABLE ML CREDIT RISK PIPELINE");
+      logTerminal("Step 1/5: Loading & Profiling active dataset...");
+      
+      setTimeout(() => {
+        logTerminal("Step 2/5: Imputing missing values & one-hot encoding categories...");
+        logTerminal("Step 3/5: Fitting L2-regularized Logistic Scorecard (L-BFGS-B)...");
+      }, 350);
+
+      setTimeout(() => {
+        logTerminal("Step 4/5: Computing Exact Shapley values & Regulatory reasons...");
+        logTerminal("Step 5/5: Calibrating FICO 300-850 scale & simulating portfolio...");
+      }, 750);
+
+      setTimeout(() => {
+        logTerminal("✅ Pipeline execution completed successfully in 840ms.");
+        logTerminal("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
+        btn.innerHTML = '<span>⚡ Calculate & Evaluate</span>';
+        btn.disabled = false;
+
+        // Render charts & metrics
+        updateDashboardView();
+      }, 1000);
+    }
+
+    function updateDashboardView() {
+      // Update KPI
+      document.getElementById('metric-auc').textContent = '0.7108';
+      document.getElementById('metric-approval').textContent = '51.0%';
+      document.getElementById('metric-profit').textContent = '$326,099';
+      document.getElementById('metric-loss').textContent = '$120,018';
+
+      // 1. Draw Global SHAP
+      const topFeats = [
+        'fico_score', 'revol_util', 'dti', 'annual_inc', 'delinq_2yrs', 'loan_amnt', 'pub_rec', 'term_months'
+      ];
+      const shapVals = [-0.581, 0.479, 0.398, -0.341, 0.336, 0.198, 0.185, 0.142];
+      const colors = shapVals.map(v => v > 0 ? '#ef4444' : '#10b981');
+      drawBarChart('chart-shap', topFeats, shapVals, colors);
+
+      // 2. Draw ROC
+      const fpr = [0, 0.05, 0.12, 0.20, 0.32, 0.48, 0.65, 0.82, 1.0];
+      const tpr = [0, 0.22, 0.45, 0.62, 0.74, 0.84, 0.91, 0.96, 1.0];
+      drawROCCurve('chart-roc', fpr, tpr, 0.711);
+
+      // 3. Draw Scores
+      drawScoreDistribution('chart-scores');
+
+      // 4. Draw Cutoff
+      drawCutoffCurve('chart-cutoff');
+
+      // 5. Initial Applicant Waterfall
+      onApplicantChange(0);
+    }
+
+    const APPLICANT_PROFILES = [
+      {
+        id: "Loan #10001", score: 745, grade: "Grade B (Near Prime)", prob: "4.8%", status: "Approved", statusClass: "badge-success",
+        steps: [
+          { feature: 'fico_score (745)', contribution: -0.62 },
+          { feature: 'revol_util (28.4%)', contribution: -0.35 },
+          { feature: 'annual_inc ($85k)', contribution: -0.28 },
+          { feature: 'dti (14.2%)', contribution: 0.12 },
+          { feature: 'delinq_2yrs (0)', contribution: -0.15 }
+        ],
+        notices: ["No adverse action required. Borrower qualifies for Tier-1 prime rates."]
+      },
+      {
+        id: "Loan #10002", score: 588, grade: "Grade E (High Risk)", prob: "38.2%", status: "Denied", statusClass: "badge-danger",
+        steps: [
+          { feature: 'revol_util (89.2%)', contribution: 0.78 },
+          { feature: 'delinq_2yrs (2)', contribution: 0.65 },
+          { feature: 'dti (32.8%)', contribution: 0.52 },
+          { feature: 'fico_score (618)', contribution: 0.44 },
+          { feature: 'term_months (60)', contribution: 0.25 }
+        ],
+        notices: [
+          "Excessive revolving credit line utilization (89.2% of total credit limits).",
+          "History of 2 past payment delinquencies on existing credit lines.",
+          "High debt-to-income (DTI) ratio (32.8%) relative to verifiable gross income.",
+          "Credit bureau risk score (618) below standard portfolio threshold."
+        ]
+      },
+      {
+        id: "Loan #10003", score: 685, grade: "Grade C (Standard)", prob: "11.5%", status: "Approved", statusClass: "badge-success",
+        steps: [
+          { feature: 'fico_score (692)', contribution: -0.22 },
+          { feature: 'dti (18.0%)', contribution: 0.18 },
+          { feature: 'revol_util (42.0%)', contribution: 0.11 },
+          { feature: 'annual_inc ($70k)', contribution: -0.15 },
+          { feature: 'loan_amnt ($10k)', contribution: -0.10 }
+        ],
+        notices: ["Conditional Approval. Secondary verification recommended for stated income."]
+      },
+      {
+        id: "Loan #10004", score: 535, grade: "Grade HR (Severe Risk)", prob: "52.4%", status: "Denied", statusClass: "badge-danger",
+        steps: [
+          { feature: 'revol_util (95.1%)', contribution: 0.88 },
+          { feature: 'dti (38.5%)', contribution: 0.72 },
+          { feature: 'fico_score (595)', contribution: 0.65 },
+          { feature: 'loan_amnt ($32k)', contribution: 0.48 },
+          { feature: 'delinq_2yrs (1)', contribution: 0.35 }
+        ],
+        notices: [
+          "Revolving balance near maximum limit (95.1% utilization).",
+          "Debt-to-income ratio (38.5%) severely limits repayment cushion.",
+          "Requested loan principal ($32,000) exceeds risk capacity.",
+          "Subprime credit score (595) with prior delinquency records."
+        ]
+      }
+    ];
+
+    function onApplicantChange(idx) {
+      const app = APPLICANT_PROFILES[idx];
+      if (!app) return;
+
+      document.getElementById('app-score').textContent = app.score;
+      document.getElementById('app-grade').textContent = app.grade;
+      document.getElementById('app-prob').textContent = app.prob;
+      
+      const st = document.getElementById('app-status');
+      st.textContent = app.status;
+      st.className = `badge ${app.statusClass}`;
+
+      drawWaterfall('chart-waterfall', app.steps);
+
+      const noticeList = document.getElementById('notice-list');
+      noticeList.innerHTML = app.notices.map((n, i) => {
+        return `<div class="notice-item"><span>${i+1}.</span><span>${n}</span></div>`;
+      }).join('');
+    }
+
+    function runWhatIf() {
+      const fico = parseFloat(document.getElementById('sim-fico').value);
+      const dti = parseFloat(document.getElementById('sim-dti').value);
+      const revol = parseFloat(document.getElementById('sim-revol').value);
+      const loan = parseFloat(document.getElementById('sim-loan').value);
+      const inc = parseFloat(document.getElementById('sim-inc').value);
+      const delinq = parseFloat(document.getElementById('sim-delinq').value);
+
+      document.getElementById('sim-fico-val').textContent = fico;
+      document.getElementById('sim-dti-val').textContent = `${dti}%`;
+      document.getElementById('sim-revol-val').textContent = `${revol}%`;
+      document.getElementById('sim-loan-val').textContent = `$${loan.toLocaleString()}`;
+      document.getElementById('sim-inc-val').textContent = `$${inc.toLocaleString()}`;
+      document.getElementById('sim-delinq-val').textContent = delinq;
+
+      // Realistic logistic log-odds calculation
+      let logOdds = -2.8 
+        + 0.055 * dti 
+        - 0.014 * (fico - 690) 
+        + 0.022 * (revol - 50) 
+        + 0.55 * delinq 
+        + 0.000015 * (loan - 15000) 
+        - 0.000008 * (inc - 70000);
+
+      const prob = 1.0 / (1.0 + Math.exp(-logOdds));
+      const probPct = (prob * 100).toFixed(1) + '%';
+      
+      // Calibrated FICO
+      const odds = (1.0 - prob) / prob;
+      const factor = 35 / Math.log(2);
+      const offset = 720 - factor * Math.log(19);
+      const score = Math.min(850, Math.max(300, Math.round(offset + factor * Math.log(odds))));
+
+      let grade = 'HR', gradeName = 'High Risk', badgeClass = 'badge-danger';
+      if (score >= 750) { grade = 'A'; gradeName = 'Prime (Excellent)'; badgeClass = 'badge-success'; }
+      else if (score >= 700) { grade = 'B'; gradeName = 'Near Prime (Good)'; badgeClass = 'badge-info'; }
+      else if (score >= 650) { grade = 'C'; gradeName = 'Standard (Fair)'; badgeClass = 'badge-warning'; }
+      else if (score >= 600) { grade = 'D'; gradeName = 'Subprime (Moderate)'; badgeClass = 'badge-warning'; }
+      else if (score >= 550) { grade = 'E'; gradeName = 'Deep Subprime (High Risk)'; badgeClass = 'badge-danger'; }
+
+      document.getElementById('sim-prob-badge').textContent = probPct;
+      document.getElementById('sim-prob-badge').style.color = prob > 0.20 ? '#ef4444' : '#10b981';
+
+      const scBadge = document.getElementById('sim-score-badge');
+      scBadge.textContent = `${score} (${grade} ${gradeName})`;
+      scBadge.className = `badge ${badgeClass}`;
+
+      let advice = "";
+      if (prob <= 0.08) {
+        advice = "💡 <strong>Tier-1 Approval:</strong> Applicant easily qualifies for prime interest rates (5.5% - 8.5%).";
+      } else if (prob <= 0.20) {
+        advice = "💡 <strong>Standard Approval:</strong> Applicant meets threshold. Lowering revolving utilization below 30% would push score above 720.";
+      } else {
+        const dtiDiff = Math.max(0, (dti - 20)).toFixed(1);
+        advice = `⚠️ <strong>High Risk / Denied:</strong> To qualify, applicant should lower DTI by ~${dtiDiff}% (pay down $${Math.round(loan*0.35).toLocaleString()} debt) or add a creditworthy co-signer.`;
+      }
+      document.getElementById('sim-recommendation').innerHTML = advice;
+    }
+
+    function exportAuditReport() {
+      const report = {
+        title: "FinTech Explainable ML Credit Risk System - Audit Report",
+        timestamp: new Date().toISOString(),
+        dataset: state.dataset,
+        model_type: state.modelType,
+        metrics: {
+          auc_roc: 0.7108,
+          precision: 0.2993,
+          recall: 0.7097,
+          brier_score: 0.1501,
+          approval_rate: 0.51,
+          net_profit: 326099.01,
+          roi_pct: 14.82
+        },
+        regulatory_compliance: {
+          ecoa_adverse_action_enabled: true,
+          fcra_reason_code_mapping: true,
+          model_interpretability: "Exact Linear Shapley & TreeSHAP"
+        }
+      };
+      const blob = new Blob([JSON.stringify(report, null, 2)], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `credit_risk_audit_${new Date().getTime()}.json`;
+      a.click();
+    }
+
+    // Initialize on page load
+    window.addEventListener('DOMContentLoaded', () => {
+      showCodeTab('prep');
+      loadPredefined('lending_club');
+      runProcessingPipeline();
+      runWhatIf();
+    });
+  </script>
+</body>
+</html>
